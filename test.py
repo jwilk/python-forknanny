@@ -6,6 +6,7 @@
 import os
 import sys
 import threading
+import time
 
 if sys.version_info < (2, 7):
     import unittest2 as unittest
@@ -34,6 +35,7 @@ class Test(unittest.TestCase):
             self.assertEqual(status, 0x4200)
         evt.set()
         thr.join()
+        time.sleep(0.1)  # FIXME!?
         if os.fork() == 0:
             os._exit(0x42)
         (pid, status) = os.wait()
