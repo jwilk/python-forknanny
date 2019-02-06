@@ -2,6 +2,8 @@ language: python
 dist: trusty
 jobs:
   include:
+  - python: "2.6"
+  - python: "2.7"
   - python: "3.2"
   - python: "3.3"
   - python: "3.4"
@@ -13,13 +15,15 @@ jobs:
     dist: xenial
 before_install:
 - pyflakes=pyflakes
+- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pyflakes='pyflakes<2'; fi
 - if [[ $TRAVIS_PYTHON_VERSION = 3.[23] ]]; then pyflakes='pyflakes<2'; fi
 install:
-- python3 -m pip install pydiatra
-- python3 -m pip install $pyflakes
+- if [[ $TRAVIS_PYTHON_VERSION = 2.6 ]]; then pip install unittest2; fi
+- pip install pydiatra
+- pip install $pyflakes
 script:
-- python3 test.py --verbose
-- python3 -m pydiatra .
-- python3 -m pyflakes .
+- python test.py --verbose
+- python -m pydiatra .
+- pyflakes .
 
 # vim:ts=2 sts=2 sw=2 et
