@@ -13,16 +13,21 @@ import threading
 
 _orig_fork = os.fork
 
-def fork():
-    threads = threading.enumerate()
-    if len(threads) > 1:
-        err = errno.EDEADLK
-        msg = (
-            os.strerror(err) + '\n'
+def _fail(threads=None):
+    err = errno.EDEADLK
+    msg = os.strerror(err)
+    if threads is not None:
+        msg += (
+            '\n'
             'Active threads:\n'
             + '\n'.join('* ' + repr(t) for t in threads)
         )
-        raise OSError(err, msg)
+    raise OSError(err, msg)
+
+def fork():
+    threads = threading.enumerate()
+    if len(threads) > 1:
+        _fail(threads)
     return _orig_fork()
 
 def install():
