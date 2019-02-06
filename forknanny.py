@@ -9,6 +9,7 @@ forbid os.fork() in multi-threaded programs
 
 import errno
 import os
+import sys
 import threading
 
 _orig_fork = os.fork
@@ -24,10 +25,20 @@ def _fail(threads=None):
         )
     raise OSError(err, msg)
 
+_is_linux = sys.platform.startswith('linux')
+
 def fork():
     threads = threading.enumerate()
     if len(threads) > 1:
         _fail(threads)
+    elif _is_linux:
+        with open('/proc/self/status', 'rb') as fp:
+            for line in fp:
+                if line.startswith(b'Threads:'):
+                    _, n_threads = line.split(b':', 1)
+                    n_threads = int(n_threads)
+                    if n_threads > 1:
+                        _fail()
     return _orig_fork()
 
 def install():
