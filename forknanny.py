@@ -7,8 +7,8 @@
 forbid os.fork() in multi-threaded programs
 '''
 
-import os
 import errno
+import os
 import threading
 
 _orig_fork = os.fork
