@@ -8,7 +8,6 @@
 '''
 
 import distutils.core
-import distutils.command.build_py
 
 try:
     import distutils644
