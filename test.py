@@ -15,6 +15,8 @@ else:
 
 import forknanny
 
+b''  # Python >= 2.6 is required
+
 class Test(unittest.TestCase):
 
     def setUp(self):

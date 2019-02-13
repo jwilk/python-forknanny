@@ -12,6 +12,8 @@ import os
 import sys
 import threading
 
+b''  # Python >= 2.6 is required
+
 _orig_fork = os.fork
 
 def _fail(threads=None):
