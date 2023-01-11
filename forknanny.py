@@ -23,7 +23,7 @@ def _fail(threads=None):
         msg += (
             '\n'
             'Active threads:\n'
-            + '\n'.join('* ' + repr(t) for t in threads)
+            + str.join('\n', ('* ' + repr(t) for t in threads))
         )
     raise OSError(err, msg)
 
